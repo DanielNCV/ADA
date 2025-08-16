@@ -1,0 +1,108 @@
+#include <iostream>
+#include <vector>
+#include <list>
+using namespace std;
+struct nodo {
+    char v;
+    int distancia_n_objetivo;
+    vector<pair<nodo*,int>> aristas;
+    nodo(char v_, int d) {
+        v = v_;
+        distancia_n_objetivo = d;
+    }
+};
+//arista que va ambos lados
+void ins_arista(nodo&a, nodo&b, int peso_de_Arista) {
+    pair<nodo*, int> p(&b, peso_de_Arista);
+    pair<nodo*, int> q(&a, peso_de_Arista);
+
+    a.aristas.push_back(p);
+    b.aristas.push_back(q);
+}
+
+void el_mejor_primero(nodo&ini, nodo&obj, vector<nodo> &camino) {   
+    if (ini.distancia_n_objetivo == 0)
+        cout << "ya estas en el objetivo";
+    else {
+        list<nodo> l;
+        l.push_back(ini);
+        bool n = 1;
+        int menor = ini.distancia_n_objetivo;
+        list<nodo>::iterator id_menor = l.begin();
+        while (n) {
+            //buscar menor
+            for (auto it = l.begin(); it != l.end();++it) {
+                if ((*it).distancia_n_objetivo <= menor) {
+                    menor = (*it).distancia_n_objetivo;
+                    id_menor = it;
+                    camino.push_back(*id_menor);
+                }
+                if (menor == 0) {
+                    n = 0;
+                }
+            }
+            // ya tengo el menor y no es 0, insertar hijos
+            for (auto i : (*id_menor).aristas) {
+                l.insert(id_menor, *(i.first));
+            }
+            id_menor = l.erase(id_menor);          
+        }       
+    }
+}
+
+int main() {
+    // Crear nodos con distancia al objetivo (Bucarest = 'B', distancia 0)
+    nodo A('A', 366); // Arad
+    nodo B('B', 0);   // Bucharest
+    nodo C('C', 160); // Craiova
+    nodo D('D', 242); // Dobreta
+    nodo E('E', 161); // Eforie
+    nodo F('F', 178); // Fagaras
+    nodo G('G', 77);  // Giurgiu
+    nodo H('H', 151); // Hirsova
+    nodo I('I', 226); // Iasi
+    nodo L('L', 244); // Lugoj
+    nodo M('M', 241); // Mehadia
+    nodo N('N', 234); // Neamt
+    nodo O('O', 380); // Oradea
+    nodo P('P', 98);  // Pitesti
+    nodo R('R', 193); // Rimnicu Vilcea
+    nodo S('S', 253); // Sibiu
+    nodo T('T', 329); // Timisoara
+    nodo U('U', 80);  // Urziceni
+    nodo V('V', 199); // Vaslui
+    nodo Z('Z', 374); // Zerind
+
+    // Insertar aristas bidireccionales con peso
+    ins_arista(A, Z, 75);
+    ins_arista(A, S, 140);
+    ins_arista(A, T, 118);
+    ins_arista(Z, O, 71);
+    ins_arista(O, S, 151);
+    ins_arista(T, L, 111);
+    ins_arista(L, M, 70);
+    ins_arista(M, D, 75);
+    ins_arista(D, C, 120);
+    ins_arista(C, R, 146);
+    ins_arista(C, P, 138);
+    ins_arista(S, F, 99);
+    ins_arista(S, R, 80);
+    ins_arista(F, B, 211);
+    ins_arista(R, P, 97);
+    ins_arista(P, B, 101);
+    ins_arista(B, G, 90);
+    ins_arista(B, U, 85);
+    ins_arista(U, H, 98);
+    ins_arista(H, E, 86);
+    ins_arista(U, V, 142);
+    ins_arista(V, I, 92);
+    ins_arista(I, N, 87);
+
+    vector<nodo> aux;
+    el_mejor_primero(A, B, aux);
+    cout << endl;
+    for (auto i : aux) {
+        cout << i.v << " " << i.distancia_n_objetivo << endl;
+
+    }   
+}
