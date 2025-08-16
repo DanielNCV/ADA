@@ -33,11 +33,6 @@ void el_mejor_primero(nodo&ini, nodo&obj, vector<nodo> &camino) {
         bool n = 1;
         int menor = ini.distancia_n_objetivo;
         list<nodo>::iterator id_menor = l.begin();
-        for (auto i : l) {
-            std::cout << i.v << ' ';
-        }
-        std::cout << '\n';
-
         while (n) {
             //buscar menor
             for (auto it = l.begin(); it != l.end();++it) {
@@ -54,11 +49,8 @@ void el_mejor_primero(nodo&ini, nodo&obj, vector<nodo> &camino) {
             for (auto i : (*id_menor).aristas) {
                 l.insert(id_menor, *(i.first));
             }
-            id_menor = l.erase(id_menor);
-            
-        }
-        
-        
+            id_menor = l.erase(id_menor);          
+        }       
     }
 }
 
@@ -67,25 +59,18 @@ void a_asterisco(nodo& ini, nodo& obj, vector<nodo>& camino) {
     if (ini.distancia_n_objetivo == 0)
         cout << "ya estas en el objetivo";
     else {
-        list <pair< nodo,int >> l;
+        list <pair< nodo,int >> l; //lista de <nodo, (peso+distancia) del nodo>
         l.push_back(pair<nodo,int> (ini,0) );
         bool n = 1;
         
         char n_inicial = ini.v;
         list<pair< nodo, int >>::iterator id_menor = l.begin();
-
-        for (auto i : l) {
-            std::cout << i.first.v << ' ';
-        }
-        std::cout << '\n';
-
-       
-        
+    
         while (n) {
             //1 calcular peso  aristas del menor, para todos los nodos 
             for (auto i : (*id_menor).first.aristas) {
                 int f_n = i.second + i.first->distancia_n_objetivo; //peso+distancia
-                l.push_back(pair<nodo, int>((*i.first), f_n));
+                l.push_back(pair<nodo, int>((*i.first), f_n)); 
             }
             id_menor = l.erase(id_menor);
 
@@ -100,15 +85,10 @@ void a_asterisco(nodo& ini, nodo& obj, vector<nodo>& camino) {
                        break;
                    }
                        
-                }
-                
+                }  
             }
             //3 meter el menor 
             camino.push_back((*id_menor).first);
-
-
-
-
         }
     }
 }
@@ -160,7 +140,6 @@ int main() {
     ins_arista(U, V, 142);
     ins_arista(V, I, 92);
     ins_arista(I, N, 87);
-
     /*
     vector<nodo> aux;
     el_mejor_primero(A, B, aux);
@@ -171,7 +150,6 @@ int main() {
 
     }
     */
-
     vector<nodo> aux2;
     a_asterisco(A, B, aux2);
     for (auto i : aux2) {
