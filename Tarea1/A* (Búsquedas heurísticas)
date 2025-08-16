@@ -23,37 +23,6 @@ void ins_arista(nodo&a, nodo&b, int peso_de_Arista) {
     a.aristas.push_back(p);
     b.aristas.push_back(q);
 }
-void el_mejor_primero(nodo&ini, nodo&obj, vector<nodo> &camino) {
-    
-    if (ini.distancia_n_objetivo == 0)
-        cout << "ya estas en el objetivo";
-    else {
-        list<nodo> l;
-        l.push_back(ini);
-        bool n = 1;
-        int menor = ini.distancia_n_objetivo;
-        list<nodo>::iterator id_menor = l.begin();
-        while (n) {
-            //buscar menor
-            for (auto it = l.begin(); it != l.end();++it) {
-                if ((*it).distancia_n_objetivo <= menor) {
-                    menor = (*it).distancia_n_objetivo;
-                    id_menor = it;
-                    camino.push_back(*id_menor);
-                }
-                if (menor == 0) {
-                    n = 0;
-                }
-            }
-            // ya tengo el menor y no es 0, insertar hijos
-            for (auto i : (*id_menor).aristas) {
-                l.insert(id_menor, *(i.first));
-            }
-            id_menor = l.erase(id_menor);          
-        }       
-    }
-}
-
 void a_asterisco(nodo& ini, nodo& obj, vector<nodo>& camino) {
 
     if (ini.distancia_n_objetivo == 0)
@@ -140,16 +109,7 @@ int main() {
     ins_arista(U, V, 142);
     ins_arista(V, I, 92);
     ins_arista(I, N, 87);
-    /*
-    vector<nodo> aux;
-    el_mejor_primero(A, B, aux);
-    cout << endl;
 
-    for (auto i : aux) {
-        cout << i.v << " " << i.distancia_n_objetivo << endl;
-
-    }
-    */
     vector<nodo> aux2;
     a_asterisco(A, B, aux2);
     for (auto i : aux2) {
